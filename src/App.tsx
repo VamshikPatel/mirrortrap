@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
@@ -31,6 +31,19 @@ export default function MirrorTrap() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(getHistory);
   const [lastProfile, setLastProfile] = useState<Profile | null>(null);
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const saved = localStorage.getItem('mirrortrap-theme');
+    return (saved === 'light' || saved === 'dark') ? saved : 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('mirrortrap-theme', theme);
+  }, [theme]);
+
+  const handleThemeToggle = useCallback(() => {
+    setTheme((prev) => prev === 'dark' ? 'light' : 'dark');
+  }, []);
 
   const handleLaunch = useCallback(async (profile: Profile) => {
     setLoading(true);
@@ -72,12 +85,13 @@ export default function MirrorTrap() {
 
   return (
     <>
-      <Background />
       <Navbar
         onHistoryClick={() => setHistoryOpen(true)}
         historyCount={history.length}
         view={view}
         onViewChange={handleViewChange}
+        theme={theme}
+        onThemeToggle={handleThemeToggle}
       />
 
       <main style={{ position: 'relative', zIndex: 1 }}>

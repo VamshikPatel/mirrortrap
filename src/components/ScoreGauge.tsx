@@ -18,16 +18,16 @@ export default function ScoreGauge({ score, verdict }: ScoreGaugeProps) {
   const progress = (score / 100) * circumference;
 
   const getColor = () => {
-    if (score >= 70) return ['#ef4444', '#f97316'];
-    if (score >= 40) return ['#f59e0b', '#eab308'];
-    return ['#22c55e', '#10b981'];
+    if (score >= 70) return ['var(--text-primary)', 'var(--text-muted)'];
+    if (score >= 40) return ['var(--text-secondary)', 'var(--text-muted)'];
+    return ['var(--text-muted)', 'var(--border-default)'];
   };
   const [c1, c2] = getColor();
 
   const getLabel = () => {
-    if (score >= 70) return '🔴 High Risk';
-    if (score >= 40) return '🟡 Medium Risk';
-    return '🟢 Low Risk';
+    if (score >= 70) return 'High Exposure';
+    if (score >= 40) return 'Moderate Exposure';
+    return 'Low Exposure';
   };
 
   useEffect(() => {
@@ -50,8 +50,8 @@ export default function ScoreGauge({ score, verdict }: ScoreGaugeProps) {
         <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={c1} />
-              <stop offset="100%" stopColor={c2} />
+              <stop offset="0%" stopColor="var(--text-primary)" />
+              <stop offset="100%" stopColor="var(--text-muted)" />
             </linearGradient>
           </defs>
           <circle cx={size / 2} cy={size / 2} r={radius}
@@ -60,7 +60,6 @@ export default function ScoreGauge({ score, verdict }: ScoreGaugeProps) {
             fill="none" stroke={`url(#${gradientId})`} strokeWidth={stroke}
             strokeLinecap="round" strokeDasharray={circumference}
             strokeDashoffset={circumference}
-            style={{ filter: `drop-shadow(0 0 8px ${c1}40)` }}
           />
         </svg>
         <div style={{
@@ -80,7 +79,7 @@ export default function ScoreGauge({ score, verdict }: ScoreGaugeProps) {
         </div>
         <div style={{
           fontSize: 14, fontWeight: 700,
-          color: verdict === 'Dangerous' ? '#ef4444' : verdict === 'Suspicious' ? '#f59e0b' : '#22c55e',
+          color: 'var(--text-primary)',
         }}>
           Verdict: {verdict}
         </div>

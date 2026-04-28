@@ -51,8 +51,8 @@ export default function Background() {
           position: 'absolute',
           inset: 0,
           backgroundImage: `
-            linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)
+            linear-gradient(to right, var(--grid-line-color, rgba(255,255,255,0.03)) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid-line-color, rgba(255,255,255,0.03)) 1px, transparent 1px)
           `,
           backgroundSize: '40px 40px',
           maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, transparent 80%)',
@@ -69,7 +69,7 @@ export default function Background() {
           transform: 'translate(-50%, -50%)',
           width: '400px',
           height: '400px',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, var(--mouse-glow-color, rgba(255,255,255,0.03)) 0%, transparent 70%)',
           filter: 'blur(30px)',
           transition: 'top 0.1s ease-out, left 0.1s ease-out',
         }}

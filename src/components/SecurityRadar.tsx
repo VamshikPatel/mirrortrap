@@ -47,9 +47,9 @@ export default function SecurityRadar() {
   const rings = [0.25, 0.45, 0.65, 0.85];
 
   const severityColors: Record<string, string> = {
-    high: '#ef4444',
-    medium: '#f59e0b',
-    low: '#22c55e',
+    high: 'var(--text-primary)',
+    medium: 'var(--text-secondary)',
+    low: 'var(--text-muted)',
   };
 
   return (
@@ -77,8 +77,8 @@ export default function SecurityRadar() {
         <defs>
           {/* Sweep gradient */}
           <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="rgba(168, 85, 247, 0)" />
-            <stop offset="100%" stopColor="rgba(168, 85, 247, 0.6)" />
+            <stop offset="0%" stopColor="rgba(255, 255, 255, 0)" />
+            <stop offset="100%" stopColor="rgba(255, 255, 255, 0.4)" />
           </linearGradient>
           {/* Glow filter */}
           <filter id="glow">
@@ -105,7 +105,7 @@ export default function SecurityRadar() {
             cy={center}
             r={center * r}
             fill="none"
-            stroke="rgba(139, 92, 246, 0.12)"
+            stroke="var(--border-subtle)"
             strokeWidth={1}
             style={{
               opacity: 0,
@@ -116,32 +116,32 @@ export default function SecurityRadar() {
 
         {/* Crosshair lines */}
         <line x1={center} y1={center * 0.1} x2={center} y2={center * 1.9}
-          stroke="rgba(139, 92, 246, 0.08)" strokeWidth={0.5}
+          stroke="var(--border-subtle)" strokeWidth={0.5}
           strokeDasharray="4 4"
           style={{ opacity: 0, animation: 'radarRingIn 0.6s 0.8s ease-out forwards' }}
         />
         <line x1={center * 0.1} y1={center} x2={center * 1.9} y2={center}
-          stroke="rgba(139, 92, 246, 0.08)" strokeWidth={0.5}
+          stroke="var(--border-subtle)" strokeWidth={0.5}
           strokeDasharray="4 4"
           style={{ opacity: 0, animation: 'radarRingIn 0.6s 0.8s ease-out forwards' }}
         />
         {/* Diagonal crosshairs */}
         <line x1={center + center * 0.85 * Math.cos(Math.PI / 4)} y1={center - center * 0.85 * Math.sin(Math.PI / 4)}
           x2={center - center * 0.85 * Math.cos(Math.PI / 4)} y2={center + center * 0.85 * Math.sin(Math.PI / 4)}
-          stroke="rgba(139, 92, 246, 0.05)" strokeWidth={0.5}
+          stroke="var(--border-subtle)" strokeWidth={0.5}
           style={{ opacity: 0, animation: 'radarRingIn 0.6s 0.9s ease-out forwards' }}
         />
         <line x1={center - center * 0.85 * Math.cos(Math.PI / 4)} y1={center - center * 0.85 * Math.sin(Math.PI / 4)}
           x2={center + center * 0.85 * Math.cos(Math.PI / 4)} y2={center + center * 0.85 * Math.sin(Math.PI / 4)}
-          stroke="rgba(139, 92, 246, 0.05)" strokeWidth={0.5}
+          stroke="var(--border-subtle)" strokeWidth={0.5}
           style={{ opacity: 0, animation: 'radarRingIn 0.6s 0.9s ease-out forwards' }}
         />
 
         {/* Center glow */}
-        <circle cx={center} cy={center} r={4} fill="#a855f7" filter="url(#glowStrong)"
+        <circle cx={center} cy={center} r={4} fill="var(--text-muted)" filter="url(#glowStrong)"
           style={{ opacity: 0, animation: 'radarRingIn 0.5s 1s ease-out forwards' }}
         />
-        <circle cx={center} cy={center} r={2} fill="#c084fc"
+        <circle cx={center} cy={center} r={2} fill="var(--text-primary)"
           style={{ opacity: 0, animation: 'radarRingIn 0.5s 1s ease-out forwards' }}
         />
       </svg>
@@ -164,10 +164,10 @@ export default function SecurityRadar() {
             top: center,
             left: center,
             width: center * 0.85,
-            height: 2,
+            height: 1,
             transformOrigin: '0 50%',
-            background: 'linear-gradient(90deg, rgba(168, 85, 247, 0.8), rgba(168, 85, 247, 0))',
-            filter: 'blur(1px)',
+            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))',
+            filter: 'blur(0.5px)',
           }}
         />
         {/* Sweep trail (conic gradient) */}
@@ -176,7 +176,7 @@ export default function SecurityRadar() {
             position: 'absolute',
             inset: center * 0.15,
             borderRadius: '50%',
-            background: 'conic-gradient(from 0deg, rgba(168, 85, 247, 0.08) 0deg, transparent 40deg)',
+            background: 'conic-gradient(from 0deg, rgba(255, 255, 255, 0.05) 0deg, transparent 40deg)',
           }}
         />
       </div>
@@ -262,7 +262,7 @@ export default function SecurityRadar() {
               ...positions[i],
               fontSize: 10,
               fontWeight: 700,
-              color: 'rgba(139, 92, 246, 0.25)',
+              color: 'var(--text-muted)',
               fontFamily: 'var(--font-mono, monospace)',
               letterSpacing: '0.1em',
               opacity: 0,
@@ -280,8 +280,8 @@ export default function SecurityRadar() {
           position: 'absolute',
           inset: -1,
           borderRadius: '50%',
-          border: '1px solid rgba(139, 92, 246, 0.1)',
-          boxShadow: '0 0 40px rgba(139, 92, 246, 0.05), inset 0 0 40px rgba(139, 92, 246, 0.03)',
+          border: '1px solid var(--border-subtle)',
+          boxShadow: '0 0 40px rgba(255, 255, 255, 0.02), inset 0 0 40px rgba(255, 255, 255, 0.01)',
           opacity: 0,
           animation: 'radarRingIn 1s 0.2s ease-out forwards',
         }}

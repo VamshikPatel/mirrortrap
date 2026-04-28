@@ -1,65 +1,119 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
 
-/* ===== DARK-FIRST DESIGN SYSTEM ===== */
+/* ===== SHADCN MONOCHROME DESIGN SYSTEM ===== */
 
 :root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-card: rgba(22, 27, 34, 0.6);
-  --bg-card-hover: rgba(33, 38, 45, 0.8);
-  --bg-glass: rgba(13, 17, 23, 0.4);
+  --bg-primary: #000000;
+  --bg-secondary: #09090b;
+  --bg-card: rgba(9, 9, 11, 0.6);
+  --bg-card-hover: rgba(24, 24, 27, 0.8);
+  --bg-glass: rgba(0, 0, 0, 0.8);
 
-  --border-subtle: #21262d;
-  --border-default: #30363d;
-  --border-accent: #8b949e;
+  --border-subtle: #1c1c1e;
+  --border-default: #27272a;
+  --border-accent: #a1a1aa;
 
-  --text-primary: #c9d1d9;
-  --text-secondary: #8b949e;
-  --text-muted: #6e7681;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
   --text-accent: #ffffff;
 
-  --accent-purple: #c9d1d9;
-  --accent-violet: #8b949e;
-  --accent-indigo: #c9d1d9;
-  --accent-pink: #c9d1d9;
+  --accent-purple: #fafafa;
+  --accent-violet: #a1a1aa;
+  --accent-indigo: #fafafa;
+  --accent-pink: #fafafa;
 
-  --gradient-accent: linear-gradient(135deg, #30363d, #21262d);
-  --gradient-accent-text: linear-gradient(135deg, #ffffff, #8b949e);
-  --gradient-danger: linear-gradient(135deg, #f85149, #da3633);
-  --gradient-warning: linear-gradient(135deg, #d29922, #b08320);
-  --gradient-safe: linear-gradient(135deg, #2ea043, #238636);
+  --gradient-accent: linear-gradient(135deg, #27272a, #18181b);
+  --gradient-accent-text: linear-gradient(135deg, #ffffff, #a1a1aa);
+  --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+  --gradient-warning: linear-gradient(135deg, #eab308, #ca8a04);
+  --gradient-safe: linear-gradient(135deg, #22c55e, #16a34a);
 
-  --glow-purple: 0 0 10px rgba(255, 255, 255, 0.05);
-  --glow-purple-intense: 0 0 15px rgba(255, 255, 255, 0.1);
-  --glow-danger: 0 0 20px rgba(248, 81, 73, 0.3), 0 0 60px rgba(248, 81, 73, 0.1);
+  --glow-purple: 0 0 10px rgba(255, 255, 255, 0.03);
+  --glow-purple-intense: 0 0 15px rgba(255, 255, 255, 0.06);
+  --glow-danger: 0 0 20px rgba(239, 68, 68, 0.3), 0 0 60px rgba(239, 68, 68, 0.1);
 
-  --radius: 0.5rem;
-  --font-sans: 'Geist Variable', system-ui, -apple-system, sans-serif;
+  --radius: 0.625rem;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', Consolas, monospace;
 
   /* shadcn compat */
-  --background: #0d1117;
-  --foreground: #c9d1d9;
-  --card: #161b22;
-  --card-foreground: #c9d1d9;
-  --popover: #161b22;
-  --popover-foreground: #c9d1d9;
-  --primary: #ffffff;
-  --primary-foreground: #0d1117;
-  --secondary: #21262d;
-  --secondary-foreground: #c9d1d9;
-  --muted: #21262d;
-  --muted-foreground: #8b949e;
-  --accent: #21262d;
-  --accent-foreground: #c9d1d9;
-  --destructive: #f85149;
-  --border: #30363d;
-  --input: #30363d;
-  --ring: #8b949e;
+  --background: #000000;
+  --foreground: #fafafa;
+  --card: #09090b;
+  --card-foreground: #fafafa;
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #09090b;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #a1a1aa;
+}
+
+/* ===== LIGHT THEME ===== */
+
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-card: rgba(250, 250, 250, 0.8);
+  --bg-card-hover: rgba(244, 244, 245, 0.9);
+  --bg-glass: rgba(255, 255, 255, 0.6);
+
+  --border-subtle: #e4e4e7;
+  --border-default: #d4d4d8;
+  --border-accent: #71717a;
+
+  --text-primary: #09090b;
+  --text-secondary: #71717a;
+  --text-muted: #a1a1aa;
+  --text-accent: #09090b;
+
+  --accent-purple: #09090b;
+  --accent-violet: #71717a;
+  --accent-indigo: #09090b;
+  --accent-pink: #09090b;
+
+  --gradient-accent: linear-gradient(135deg, #e4e4e7, #d4d4d8);
+  --gradient-accent-text: linear-gradient(135deg, #09090b, #71717a);
+  --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+  --gradient-warning: linear-gradient(135deg, #eab308, #ca8a04);
+  --gradient-safe: linear-gradient(135deg, #22c55e, #16a34a);
+
+  --glow-purple: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --glow-purple-intense: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --glow-danger: 0 0 20px rgba(239, 68, 68, 0.15), 0 0 60px rgba(239, 68, 68, 0.05);
+
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #fafafa;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #ef4444;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #a1a1aa;
+
+  color-scheme: light;
 }
 
 /* ===== BASE ===== */
@@ -72,6 +126,10 @@ html {
   font-family: var(--font-sans);
   scroll-behavior: smooth;
   color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {
@@ -102,31 +160,28 @@ body {
   background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
+  background: var(--border-default);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(168, 85, 247, 0.5);
+  background: var(--border-accent);
 }
 
 /* ===== TYPOGRAPHY ===== */
 
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.5rem, 6vw, 4rem);
 }
 
 h2 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
-  letter-spacing: -0.03em;
 }
 
 h3 {
@@ -143,76 +198,12 @@ a {
   transition: color 0.2s;
 }
 a:hover {
-  color: #e9d5ff;
+  color: var(--text-primary);
 }
 
-/* ===== DOT GRID BACKGROUND ===== */
+/* ===== CLEAN BACKGROUND ===== */
+/* Grids and orbs removed as per user request for pure form */
 
-.dot-grid {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 70%);
-}
-
-/* ===== GLOW ORBS ===== */
-
-.glow-orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-
-.glow-orb-1 {
-  width: 600px;
-  height: 600px;
-  background: rgba(168, 85, 247, 0.15);
-  top: -200px;
-  left: -100px;
-  animation: orbFloat1 20s ease-in-out infinite;
-}
-
-.glow-orb-2 {
-  width: 500px;
-  height: 500px;
-  background: rgba(99, 102, 241, 0.12);
-  bottom: -150px;
-  right: -100px;
-  animation: orbFloat2 25s ease-in-out infinite;
-}
-
-.glow-orb-3 {
-  width: 400px;
-  height: 400px;
-  background: rgba(236, 72, 153, 0.08);
-  top: 40%;
-  right: 10%;
-  animation: orbFloat3 18s ease-in-out infinite;
-}
-
-@keyframes orbFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(60px, 40px) scale(1.1); }
-  66% { transform: translate(-30px, 80px) scale(0.95); }
-}
-
-@keyframes orbFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-50px, -30px) scale(1.05); }
-  66% { transform: translate(40px, -60px) scale(0.9); }
-}
-
-@keyframes orbFloat3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-40px, 30px) scale(1.1); }
-}
 
 /* ===== GLASSMORPHISM CARDS ===== */
 
@@ -228,7 +219,7 @@ a:hover {
 .glass-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-default);
-  box-shadow: var(--glow-purple);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== GRADIENT TEXT ===== */
@@ -283,7 +274,7 @@ a:hover {
 
 .glow-button:hover {
   transform: translateY(-2px);
-  box-shadow: var(--glow-purple-intense);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .glow-button:hover::before {
@@ -331,9 +322,9 @@ a:hover {
 }
 
 .input-field:focus {
-  border-color: var(--accent-purple);
-  background: rgba(168, 85, 247, 0.05);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+  border-color: var(--border-accent);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 2px var(--border-subtle);
 }
 
 /* Fix for native select dropdown options */
@@ -357,35 +348,15 @@ option {
   border: 1px solid;
 }
 
-.trigger-badge.urgency {
-  color: #fca5a5;
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-.trigger-badge.fake-authority {
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.1);
-  border-color: rgba(139, 92, 246, 0.3);
-}
-.trigger-badge.scarcity {
-  color: #fcd34d;
-  background: rgba(245, 158, 11, 0.1);
-  border-color: rgba(245, 158, 11, 0.3);
-}
-.trigger-badge.fear {
-  color: #fda4af;
-  background: rgba(244, 63, 94, 0.1);
-  border-color: rgba(244, 63, 94, 0.3);
-}
-.trigger-badge.reciprocity {
-  color: #86efac;
-  background: rgba(34, 197, 94, 0.1);
-  border-color: rgba(34, 197, 94, 0.3);
-}
+.trigger-badge.urgency,
+.trigger-badge.fake-authority,
+.trigger-badge.scarcity,
+.trigger-badge.fear,
+.trigger-badge.reciprocity,
 .trigger-badge.social-proof {
-  color: #93c5fd;
-  background: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border-color: var(--border-default);
 }
 
 /* ===== SPINNER ===== */
@@ -398,8 +369,8 @@ option {
 .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid var(--border-subtle);
-  border-top: 3px solid var(--accent-purple);
+  border: 2px solid var(--border-subtle);
+  border-top: 2px solid var(--text-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 0 auto 12px;
@@ -476,7 +447,7 @@ option {
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: 'Inter', sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

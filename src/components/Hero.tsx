@@ -91,12 +91,12 @@ export default function Hero() {
               gap: 8,
               padding: '7px 16px',
               borderRadius: 999,
-              background: 'rgba(168, 85, 247, 0.06)',
-              border: '1px solid rgba(168, 85, 247, 0.15)',
-              color: '#c084fc',
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border-default)',
+              color: 'var(--text-primary)',
               fontSize: 13,
               fontWeight: 600,
-              letterSpacing: '0.01em',
+              letterSpacing: '-0.02em',
               marginBottom: 28,
             }}
           >
@@ -145,7 +145,7 @@ export default function Hero() {
                 style={{
                   display: 'inline-block',
                   marginRight: '0.3em',
-                  background: 'linear-gradient(135deg, #c084fc 0%, #818cf8 50%, #a78bfa 100%)',
+                  background: 'var(--gradient-accent-text)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
@@ -186,7 +186,6 @@ export default function Hero() {
               id="hero-cta"
               style={{ textDecoration: 'none', fontSize: 15, padding: '15px 32px' }}
             >
-              <Shield size={17} />
               Start Simulation
             </a>
             <span style={{
