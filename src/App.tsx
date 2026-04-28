@@ -170,8 +170,8 @@ export default function MirrorTrap() {
 
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '40px 24px', borderTop: '1px solid var(--border-subtle)', marginTop: 'auto' }}>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>MirrorTrap — Educational social engineering exposure engine</p>
-        <p style={{ fontSize: 12, color: 'var(--text-muted)', opacity: 0.5, marginTop: 4 }}>Built for awareness, not attack.</p>
+        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>MirrorTrap — AI-Driven Cyber Defense Platform</p>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', opacity: 0.5, marginTop: 4 }}>Securing the next digital era.</p>
       </footer>
 
       <AttackHistory open={historyOpen} onClose={() => setHistoryOpen(false)} entries={history} onSelect={handleSelectHistory} onClear={handleClearHistory} />

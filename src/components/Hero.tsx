@@ -50,8 +50,8 @@ export default function Hero() {
   }, [handleMouse]);
 
   // Heading text split into words for staggered reveal
-  const headingWords = ['Expose', 'Your'];
-  const headingAccent = ['Digital', 'Vulnerabilities'];
+  const headingWords = ['Intelligent', 'Cyber'];
+  const headingAccent = ['Defense', 'Solutions'];
 
   return (
     <section
@@ -104,7 +104,7 @@ export default function Hero() {
               width: 6, height: 6, borderRadius: '50%', background: '#22c55e',
               boxShadow: '0 0 8px #22c55e60',
             }} />
-            AI-Powered Red Team Engine
+            AI-Driven Cyber Defense
           </motion.div>
 
           {/* Heading — word-by-word stagger */}
@@ -169,8 +169,8 @@ export default function Hero() {
               marginBottom: 36,
             }}
           >
-            Discover how attackers weaponize your digital footprint
-            — <span style={{ color: 'var(--text-primary)' }}>before they do.</span>
+            Detect, prevent, and respond to cyber threats
+            — <span style={{ color: 'var(--text-primary)' }}>powered by predictive AI.</span>
           </motion.p>
 
           {/* CTA Button */}
