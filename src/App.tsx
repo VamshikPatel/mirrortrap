@@ -1,207 +1,180 @@
-import { useState } from 'react';
-import { forgeAttack } from './api';
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import './App.css';
 
-const PRESETS = [
-  {
-    name: 'Vamshik',
-    role: 'CS Student',
-    organization: 'NMIT Bengaluru',
-    recentActivity: 'TechFusion hackathon',
-    connection: 'Prof Sharma'
-  },
-  {
-    name: 'Rajesh Kumar',
-    role: 'CTO',
-    organization: 'Infosys',
-    recentActivity: 'IPO announcement',
-    connection: 'Board Member'
-  },
-  {
-    name: 'Priya Nair',
-    role: 'Product Manager',
-    organization: 'Swiggy',
-    recentActivity: 'Series F funding',
-    connection: 'LinkedIn recruiter'
-  }
-];
+import Background from './components/Background';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import AttackWizard from './components/AttackWizard';
+import ScoreGauge from './components/ScoreGauge';
+import AttackMessage from './components/AttackMessage';
+import MultiChannelView from './components/MultiChannelView';
+import AttackChain from './components/AttackChain';
+import VulnerabilityCards from './components/VulnerabilityCards';
+import DefensePlaybook from './components/DefensePlaybook';
+import ReportExport from './components/ReportExport';
+import AttackHistory from './components/AttackHistory';
+import PhishingTrainer from './components/PhishingTrainer';
+
+import {
+  forgeAttack,
+  saveToHistory,
+  getHistory,
+  clearHistory as clearHistoryStorage,
+} from './api';
+import type { Profile, AttackResult, HistoryEntry } from './api';
 
 export default function MirrorTrap() {
-  const [profile, setProfile] = useState({
-    name: 'Vamshik',
-    role: 'CS Student',
-    organization: 'NMIT Bengaluru',
-    recentActivity: 'TechFusion hackathon',
-    connection: 'Prof Sharma'
-  });
-
-  const [result, setResult] = useState<any>(null);
+  const [view, setView] = useState<'home' | 'training'>('home');
+  const [result, setResult] = useState<AttackResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [history, setHistory] = useState<HistoryEntry[]>(getHistory);
+  const [lastProfile, setLastProfile] = useState<Profile | null>(null);
 
-  const handleSimulate = async () => {
+  const handleLaunch = useCallback(async (profile: Profile) => {
     setLoading(true);
+    setResult(null);
     try {
       const data = await forgeAttack(profile);
       setResult(data);
-    } catch (err: any) {
-      alert(err.message);
+      setLastProfile(profile);
+      const entry = saveToHistory(profile, data);
+      setHistory((prev) => [entry, ...prev].slice(0, 50));
+      setTimeout(() => {
+        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setResult(null);
+      console.error('Attack simulation failed:', message);
     }
     setLoading(false);
-  };
+  }, []);
+
+  const handleClearHistory = useCallback(() => {
+    clearHistoryStorage();
+    setHistory([]);
+  }, []);
+
+  const handleSelectHistory = useCallback((r: AttackResult) => {
+    setResult(r);
+    setView('home');
+    setTimeout(() => {
+      document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }, []);
+
+  const handleViewChange = useCallback((v: 'home' | 'training') => {
+    setView(v);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   return (
-    <div style={{ padding: 40, fontFamily: 'sans-serif', maxWidth: 800, margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'center', fontSize: 40, marginBottom: 8 }}>MirrorTrap</h1>
-      <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: 30 }}>
-        AI-powered social engineering exposure engine
-      </p>
+    <>
+      <Background />
+      <Navbar
+        onHistoryClick={() => setHistoryOpen(true)}
+        historyCount={history.length}
+        view={view}
+        onViewChange={handleViewChange}
+      />
 
-      {/* PRESET DROPDOWN */}
-      <div style={{ marginBottom: 20 }}>
-        <label style={{ fontWeight: 'bold', marginRight: 10 }}>Quick Profile:</label>
-        <select
-          onChange={(e) => {
-            const preset = PRESETS[parseInt(e.target.value)];
-            if (preset) setProfile(preset);
-          }}
-          style={{ padding: '8px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc' }}
-        >
-          <option value="">-- Select a preset --</option>
-          {PRESETS.map((p, i) => (
-            <option key={i} value={i}>{p.name} ({p.role}, {p.organization})</option>
-          ))}
-        </select>
-      </div>
+      <main style={{ position: 'relative', zIndex: 1 }}>
+        <AnimatePresence mode="wait">
+          {view === 'home' ? (
+            <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+              <Hero />
+              <AttackWizard onLaunch={handleLaunch} loading={loading} />
 
-      {/* INPUT FIELDS */}
-      <div style={{ display: 'grid', gap: 12, marginBottom: 20 }}>
-        <input placeholder="Name" value={profile.name}
-          onChange={e => setProfile(p => ({ ...p, name: e.target.value }))}
-          style={{ padding: 10, borderRadius: 6, border: '1px solid #ccc' }} />
-        <input placeholder="Role" value={profile.role}
-          onChange={e => setProfile(p => ({ ...p, role: e.target.value }))}
-          style={{ padding: 10, borderRadius: 6, border: '1px solid #ccc' }} />
-        <input placeholder="Organization" value={profile.organization}
-          onChange={e => setProfile(p => ({ ...p, organization: e.target.value }))}
-          style={{ padding: 10, borderRadius: 6, border: '1px solid #ccc' }} />
-        <input placeholder="Recent Activity" value={profile.recentActivity}
-          onChange={e => setProfile(p => ({ ...p, recentActivity: e.target.value }))}
-          style={{ padding: 10, borderRadius: 6, border: '1px solid #ccc' }} />
-        <input placeholder="Connection" value={profile.connection}
-          onChange={e => setProfile(p => ({ ...p, connection: e.target.value }))}
-          style={{ padding: 10, borderRadius: 6, border: '1px solid #ccc' }} />
-      </div>
+              {/* Loading state */}
+              <AnimatePresence>
+                {loading && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    style={{ padding: '60px 24px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                      style={{ width: 48, height: 48, margin: '0 auto 20px', border: '3px solid var(--border-subtle)', borderTopColor: 'var(--accent-purple)', borderRadius: '50%' }} />
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 15 }}>AI is analyzing the digital footprint...</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 4 }}>Crafting a hyper-realistic attack scenario</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-      {/* BUTTON */}
-      <div style={{ textAlign: 'center' }}>
-        <button onClick={handleSimulate} disabled={loading}
-          style={{
-            padding: '14px 32px',
-            fontSize: 16,
-            cursor: loading ? 'not-allowed' : 'pointer',
-            background: loading ? '#ccc' : '#a855f7',
-            color: 'white',
-            border: 'none',
-            borderRadius: 8,
-            fontWeight: 'bold'
-          }}>
-          {loading ? 'AI Analyzing...' : 'Simulate Attack'}
-        </button>
-      </div>
+              {/* Results */}
+              <AnimatePresence>
+                {!loading && result && (
+                  <motion.section id="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
+                    style={{ padding: '20px 24px 120px', position: 'relative', zIndex: 1 }}>
+                    <div style={{ maxWidth: 640, margin: '0 auto' }}>
+                      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+                        style={{ textAlign: 'center', marginBottom: 40 }}>
+                        <h2 style={{ marginBottom: 8 }}>Analysis <span className="gradient-text">Results</span></h2>
+                        {lastProfile && (
+                          <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
+                            Target: {lastProfile.name} · {lastProfile.role} at {lastProfile.organization}
+                          </p>
+                        )}
+                      </motion.div>
 
-      {/* LOADING SPINNER */}
-      {loading && (
-        <div style={{ textAlign: 'center', padding: 40 }}>
-          <div className="spinner" />
-          <p style={{ color: '#6b7280' }}>AI is analyzing your digital footprint...</p>
-        </div>
-      )}
+                      {/* Score gauge */}
+                      <div style={{ marginBottom: 40 }}>
+                        <ScoreGauge score={result.exposure_score} verdict={result.overall_verdict} />
+                      </div>
 
-      {/* RESULT CARD */}
-      {!loading && result && (
-        <div style={{
-          marginTop: 30,
-          padding: 24,
-          background: '#f9fafb',
-          borderRadius: 12,
-          border: '1px solid #e5e7eb'
-        }}>
-          {/* SCORE METER */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span style={{ fontWeight: 'bold', fontSize: 18 }}>Exposure Score</span>
-              <span style={{ fontWeight: 'bold', fontSize: 18 }}>{result.exposure_score}/100</span>
-            </div>
-            <div style={{ width: '100%', height: 24, background: '#e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
-              <div style={{
-                width: `${result.exposure_score}%`,
-                height: '100%',
-                background: result.exposure_score >= 70 ? '#ef4444' : result.exposure_score >= 40 ? '#f59e0b' : '#22c55e',
-                borderRadius: 12,
-                transition: 'width 1s ease-out'
-              }} />
-            </div>
-            <p style={{ marginTop: 8, fontSize: 14, color: '#6b7280' }}>
-              {result.exposure_score >= 70 ? '🔴 High Risk — Immediate attention required' :
-               result.exposure_score >= 40 ? '🟡 Medium Risk — Review recommended' :
-               '🟢 Low Risk — Good security posture'}
-            </p>
-          </div>
+                      {/* Attack Kill Chain */}
+                      {lastProfile && <AttackChain profile={lastProfile} result={result} />}
 
-          {/* VERDICT */}
-          <p style={{ fontSize: 20, marginBottom: 16 }}>
-            <strong>Verdict:</strong>{' '}
-            <span style={{
-              color: result.overall_verdict === 'Dangerous' ? '#ef4444' :
-                     result.overall_verdict === 'Suspicious' ? '#f59e0b' : '#22c55e',
-              fontWeight: 'bold'
-            }}>
-              {result.overall_verdict}
-            </span>
-          </p>
+                      {/* Attack message */}
+                      <div style={{ marginBottom: 24 }}>
+                        <AttackMessage message={result.attack_message} sender={result.sender_identity} goal={result.attacker_goal} />
+                      </div>
 
-          <p style={{ marginBottom: 8 }}><strong>Sender:</strong> {result.sender_identity}</p>
-          <p style={{ marginBottom: 20, lineHeight: 1.6 }}>
-            <strong>Message:</strong> {result.attack_message}
-          </p>
-          <p style={{ marginBottom: 16, padding: 12, background: '#fef3c7', borderRadius: 6, borderLeft: '4px solid #f59e0b' }}>
-  <strong>🎯 Attacker Goal:</strong> {result.attacker_goal}
-          </p>
+                      {/* Multi-channel view */}
+                      <MultiChannelView result={result} />
 
-          {/* EXPLOITED DETAILS */}
-          <h3 style={{ marginBottom: 12, borderBottom: '2px solid #e5e7eb', paddingBottom: 8 }}>
-            Exploited Details:
-          </h3>
-          {result.exploited_details?.map((detail: any, i: number) => (
-            <div key={i} style={{
-              marginBottom: 16,
-              padding: 16,
-              background: 'white',
-              borderRadius: 8,
-              border: '1px solid #e5e7eb'
-            }}>
+                      {/* Vulnerability cards */}
+                      {result.exploited_details && result.exploited_details.length > 0 && (
+                        <div style={{ marginBottom: 24 }}>
+                          <VulnerabilityCards details={result.exploited_details} />
+                        </div>
+                      )}
 
-              <div style={{ marginTop: 20, padding: 16, background: '#ecfdf5', borderRadius: 8, border: '1px solid #a7f3d0' }}>
-                <h4 style={{ margin: '0 0 12px', color: '#065f46' }}>🛡️ Immediate Defense Actions</h4>
-                <ol style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8 }}>
-                  <li>Verify <strong>{result.sender_identity}</strong> through official channels before responding</li>
-                  <li>Never click links in unsolicited WhatsApp/email messages</li>
-                  <li>Confirm deadlines and offers directly on official websites</li>
-                  <li>Report suspicious patterns to your IT security team</li>
-                </ol>
-              </div>
-              <p style={{ fontSize: 16, fontWeight: 'bold', color: '#a855f7', marginBottom: 8 }}>
-                Trigger: {detail.trigger}
-              </p>
-              <p style={{ marginBottom: 6, lineHeight: 1.5 }}>
-                <strong>Why it works:</strong> {detail.why_it_works}
-              </p>
-              <p style={{ marginBottom: 0, lineHeight: 1.5, color: '#059669' }}>
-                <strong>Counter:</strong> {detail.counter}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                      {/* Defense playbook */}
+                      <DefensePlaybook senderIdentity={result.sender_identity} />
+
+                      {/* Report export */}
+                      {lastProfile && <ReportExport profile={lastProfile} result={result} />}
+
+                      {/* Run another */}
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+                        style={{ textAlign: 'center', marginTop: 40 }}>
+                        <a href="#simulator" className="glow-button"
+                          style={{ textDecoration: 'none', fontSize: 14, padding: '12px 24px' }}
+                          onClick={() => setResult(null)}>
+                          Run Another Simulation
+                        </a>
+                      </motion.div>
+                    </div>
+                  </motion.section>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ) : (
+            <motion.div key="training" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
+              style={{ paddingTop: 64 }}>
+              <PhishingTrainer />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+
+      {/* Footer */}
+      <footer style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '40px 24px', borderTop: '1px solid var(--border-subtle)', marginTop: 'auto' }}>
+        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>MirrorTrap — Educational social engineering exposure engine</p>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', opacity: 0.5, marginTop: 4 }}>Built for awareness, not attack.</p>
+      </footer>
+
+      <AttackHistory open={historyOpen} onClose={() => setHistoryOpen(false)} entries={history} onSelect={handleSelectHistory} onClear={handleClearHistory} />
+    </>
   );
 }

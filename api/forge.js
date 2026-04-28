@@ -1,16 +1,27 @@
-require('dotenv').config();
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
+  const { profile } = req.body;
+  const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-const express = require('express');
-const cors = require('cors');
+  if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY === 'YOUR_NEW_KEY_HERE') {
+    return res.json({
+      attack_message: `Hi ${profile?.name || 'there'}, this is IT support from ${profile?.organization || 'your org'}. We've flagged your account. Please verify your credentials immediately.`,
+      message_type: "whatsapp",
+      sender_identity: "IT Support",
+      exploited_details: [
+        { detail_type: "name", phrase: `Hi ${profile?.name}`, trigger: "SOCIAL_PROOF", why_it_works: "Personalization creates false familiarity.", counter: "Verify sender through official channels." },
+        { detail_type: "organization", phrase: `from ${profile?.organization}`, trigger: "FAKE_AUTHORITY", why_it_works: "Impersonating internal authority bypasses skepticism.", counter: "Contact IT directly via known email." }
+      ],
+      exposure_score: 78,
+      attacker_goal: "Harvest credentials for unauthorized system access.",
+      overall_verdict: "Dangerous"
+    });
+  }
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-
-const SYSTEM_PROMPT = `You are an elite red-team social engineer. Analyze the profile and generate a hyper-realistic spear-phishing attack simulation. Output ONLY a JSON object with this exact structure:
+  const SYSTEM_PROMPT = `You are an elite red-team social engineer. Analyze the profile and generate a hyper-realistic spear-phishing attack simulation. Output ONLY a JSON object with this exact structure:
 {
   "attack_message": "realistic message under 150 words",
   "message_type": "whatsapp",
@@ -29,25 +40,6 @@ const SYSTEM_PROMPT = `You are an elite red-team social engineer. Analyze the pr
   "overall_verdict": "safe|Suspicious|Dangerous"
 }`;
 
-
-app.post('/api/forge', async (req, res) => {
-  if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY === 'YOUR_NEW_KEY_HERE') {
-    return res.json({
-      attack_message: `Hi ${req.body.profile?.name || 'there'}, this is IT support from ${req.body.profile?.organization || 'your org'}. We've flagged your account. Please verify your credentials immediately.`,
-      message_type: "whatsapp",
-      sender_identity: "IT Support",
-      exploited_details: [
-        { detail_type: "name", phrase: `Hi ${req.body.profile?.name}`, trigger: "SOCIAL_PROOF", why_it_works: "Personalization creates false familiarity.", counter: "Verify sender through official channels." },
-        { detail_type: "organization", phrase: `from ${req.body.profile?.organization}`, trigger: "FAKE_AUTHORITY", why_it_works: "Impersonating internal authority bypasses skepticism.", counter: "Contact IT directly via known email." }
-      ],
-      exposure_score: 78,
-      attacker_goal: "Harvest credentials for unauthorized system access.",
-      overall_verdict: "Dangerous"
-    });
-  }
-
-  const { profile } = req.body;
-
   try {
     const url = 'https://openrouter.ai/api/v1/chat/completions';
 
@@ -56,7 +48,7 @@ app.post('/api/forge', async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'HTTP-Referer': 'http://localhost:3001',
+        'HTTP-Referer': process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173',
         'X-Title': 'MirrorTrap'
       },
       body: JSON.stringify({
@@ -90,14 +82,9 @@ app.post('/api/forge', async (req, res) => {
       return res.status(500).json({ error: 'Invalid JSON from model', raw });
     }
 
-    res.json(result);
+    res.status(200).json(result);
   } catch (err) {
     console.error('Server error:', err);
     res.status(500).json({ error: err.message });
   }
-});
-
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`✅ Proxy running on http://localhost:${PORT}`);
-});
+}
