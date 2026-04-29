@@ -170,7 +170,7 @@ export default function Hero() {
             }}
           >
             Detect, prevent, and respond to cyber threats
-            — <span style={{ color: 'var(--text-primary)' }}>powered by predictive AI.</span>
+            - <span style={{ color: 'var(--text-primary)' }}>powered by predictive AI.</span>
           </motion.p>
 
           {/* CTA Button */}
